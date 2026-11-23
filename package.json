@@ -1,0 +1,52 @@
+{
+  "name": "opencode-palace",
+  "version": "0.1.0",
+  "description": "Local, verbatim memory for OpenCode via Palace (palace-rs): automatic recall on session start, each prompt, and after reads. Not associated in any way with the popular mempalace python.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "memory",
+    "mcp",
+    "palace",
+    "local-first",
+    "coding-agents"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Ionut Riza",
+    "email": "iriza@palacememory.com",
+    "url": "https://palacememory.com"
+  },
+  "homepage": "https://github.com/palacememory/opencode-palace#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/palacememory/opencode-palace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/palacememory/opencode-palace/issues"
+  },
+  "peerDependencies": {
+    "@opencode/plugin": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@opencode/plugin": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

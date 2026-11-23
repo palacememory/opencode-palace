@@ -1,0 +1,50 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * 1" # weekly, catches changes in new palace releases
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["18", "20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install palace (latest palace-rs release)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/palace" && cd "$RUNNER_TEMP/palace"
+          gh release download --repo AncientiCe/palace-rs \
+            --pattern "palace-*-x86_64-unknown-linux-gnu.tar.gz" \
+            --pattern "palace-x86_64-unknown-linux-gnu.sha256"
+          sha256sum -c palace-x86_64-unknown-linux-gnu.sha256
+          tar xzf palace-*-x86_64-unknown-linux-gnu.tar.gz
+          bin="$(ls "$PWD"/palace-*-x86_64-unknown-linux-gnu/palace)"
+          test -x "$bin" && "$bin" --version
+          echo "PALACE_BIN=$bin" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/home"
+      - name: Mine the test fixture into a throwaway palace
+        env:
+          HOME: ${{ runner.temp }}/home
+        run: |
+          cp -r test/fixture "$RUNNER_TEMP/fixture"
+          "$PALACE_BIN" init "$RUNNER_TEMP/fixture" --yes --auto-mine
+      - name: Run tests against the real palace binary
+        env:
+          HOME: ${{ runner.temp }}/home
+        run: PALACE_TEST_CWD="$RUNNER_TEMP/fixture" npm test
+      - name: Check the npm tarball
+        run: npm pack --dry-run
