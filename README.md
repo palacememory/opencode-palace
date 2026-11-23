@@ -22,7 +22,15 @@ Not associated in any way with the popular mempalace python.
 
    `palace install --client opencode` writes the `palace` MCP server to `~/.config/opencode/opencode.json` and an agent rule. The MCP server is what gives the agent `palace_search`, `palace_remember` and the other tools.
 
-2. Add the plugin. It is not on npm yet, so load it from a local clone:
+2. Add the plugin from npm:
+
+   ```bash
+   npm i opencode-palace
+   ```
+
+   OpenCode V2 can also install it with `opencode plugin add opencode-palace@latest`. In OpenCode V1, add `"plugin": ["opencode-palace"]` to `opencode.json`.
+
+   To load a local clone instead:
 
    ```bash
    git clone https://github.com/palacememory/opencode-palace ~/.config/opencode/opencode-palace
@@ -38,8 +46,6 @@ Not associated in any way with the popular mempalace python.
    ```
 
    In OpenCode V1, use the `plugin` key instead: `"plugin": ["/home/you/.config/opencode/opencode-palace"]`.
-
-   Once it is on npm, this becomes `opencode plugin add opencode-palace@latest` (V2) or `"plugin": ["opencode-palace"]` (V1).
 
 Do you need this at all? `palace install --client opencode` also writes a plugin, to `~/.config/opencode/plugins/palace.js`. Palace 0.20.9 and newer generate one that works in V1 and V2 (0.20.8 and earlier wrote a V1-only file that V2 refuses to load). Use one or the other, not both. This package is for people who prefer to manage plugins in `opencode.json`, pin a version, or set options; it also finds `palace` on your PATH, so it survives binary moves.
 
